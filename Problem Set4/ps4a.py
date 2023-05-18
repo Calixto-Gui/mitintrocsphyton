@@ -3,7 +3,7 @@
 # Collaborators:
 # Time Spent: x:xx
 
-def get_permutations(sequence):
+def get_permutations(sequence, step = 0,lst=[]):
     '''
     Enumerate all permutations of a given string
 
@@ -23,7 +23,22 @@ def get_permutations(sequence):
     a different order than what is listed here.
     '''
 
-    pass #delete this line and replace with your code here
+    #delete this line and replace with your code here
+
+    
+    
+    if step == len(sequence):
+       lst.append("".join(sequence))
+    
+    for i in range(step, len(sequence)):
+        
+        sequence_copy = [character for character in sequence]
+        sequence_copy[step],sequence_copy[i] = sequence_copy[i],sequence_copy[step]
+        get_permutations(sequence_copy,step + 1)
+    
+    
+    return lst
+    
 
 if __name__ == '__main__':
 #    #EXAMPLE
@@ -37,4 +52,18 @@ if __name__ == '__main__':
 #    sequence of length n)
 
     pass #delete this line and replace with your code here
-
+    # print('Input:', "abc")
+    # print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
+    # print('Actual Output:', get_permutations("abc"))
+    
+    # print("====================================================================")
+    
+    # print('Input:', "nop")
+    # print('Expected Output:', ['nop', 'npo', 'onp', 'opn', 'pon', 'pno'])
+    # print('Actual Output:', get_permutations("nop"))
+    
+    print("====================================================================")
+    
+    print('Input:', "jac")
+    print('Expected Output:', ['jac', 'jca', 'ajc', 'acj', 'cja', 'caj'])
+    print('Actual Output:', get_permutations("jac"))
