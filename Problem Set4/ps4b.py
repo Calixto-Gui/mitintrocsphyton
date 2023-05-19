@@ -5,6 +5,8 @@
 
 import string
 
+
+
 ### HELPER CODE ###
 def load_words(file_name):
     '''
@@ -70,16 +72,22 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
-
+        # pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(file_name=WORDLIST_FILENAME)
+    def __str__(self) -> str:
+        return str(self.message_text)
+    
+        
     def get_message_text(self):
         '''
         Used to safely access self.message_text outside of the class
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
-
+        # pass #delete this line and replace with your code here
+        return self.message_text
+        
     def get_valid_words(self):
         '''
         Used to safely access a copy of self.valid_words outside of the class.
@@ -87,7 +95,8 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+        return self.valid_words.copy()
 
     def build_shift_dict(self, shift):
         '''
@@ -103,8 +112,29 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        #pass #delete this line and replace with your code here
+        dic = {}
+        letters_low = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','w','z']
+        letters_up = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','W','Z']
+        letters_low_rep = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','w','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','w','z']
+        letters_up_rep = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','W','Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','W','Z']
 
+        # if not and(shift >= 0; shift< 26):
+        #     print("shift must be between 0 and 25")
+        #     break
+        
+        i_low = 0
+        for c in letters_low:
+            dic[c] = letters_low_rep[i_low + shift] 
+            i_low += 1
+            
+        i_up = 0
+        for c in letters_up:
+            dic[c] = letters_up_rep[i_up + shift] 
+            i_up += 1
+
+        return dic
+    
     def apply_shift(self, shift):
         '''
         Applies the Caesar Cipher to self.message_text with the input shift.
@@ -117,7 +147,19 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+    
+        dict = self.build_shift_dict(shift)
+        text_shifted_lst = []
+        
+        for c in self.message_text:
+            text_shifted_lst.append(dict[c])
+        
+        text_shifted = ''.join(text_shifted_lst)
+            
+        return text_shifted
+            
+        
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
