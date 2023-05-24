@@ -18,14 +18,14 @@ def load_words(file_name):
     Depending on the size of the word list, this function may
     take a while to finish.
     '''
-    print("Loading word list from file...")
+    # print("Loading word list from file...")
     # inFile: file
     inFile = open(file_name, 'r')
     # wordlist: list of strings
     wordlist = []
     for line in inFile:
         wordlist.extend([word.lower() for word in line.split(' ')])
-    print("  ", len(wordlist), "words loaded.")
+    # print("  ", len(wordlist), "words loaded.")
     return wordlist
 
 def is_word(word_list, word):
@@ -75,6 +75,7 @@ class Message(object):
         # pass #delete this line and replace with your code here
         self.message_text = text
         self.valid_words = load_words(file_name=WORDLIST_FILENAME)
+        self.word_lst = text.split()
     def __str__(self) -> str:
         return str(self.message_text)
     
@@ -97,6 +98,15 @@ class Message(object):
         '''
         # pass #delete this line and replace with your code here
         return self.valid_words.copy()
+    
+    def get_word_lst(self):
+        '''
+        Used to safely access a copy of self.word_lst outside of the class.
+        This helps you avoid accidentally mutating class attributes.
+        
+        Returns: a COPY of self.word_lst
+        '''
+        return self.word_lst.copy()
 
     def build_shift_dict(self, shift):
         '''
@@ -114,10 +124,10 @@ class Message(object):
         '''
         #pass #delete this line and replace with your code here
         dic = {}
-        letters_low = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','w','z']
-        letters_up = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','W','Z']
-        letters_low_rep = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','w','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','w','z']
-        letters_up_rep = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','W','Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','W','Z']
+        letters_low = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','!','@','#','$','%','^','&','*','(',')','-','_','+','=','{','}','[',']','|',':',';','<','>','?',',','.','/','"','1','2','3','4','5','6','7','8','9','0']
+        letters_up = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        letters_low_rep = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+        letters_up_rep = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 
         # if not and(shift >= 0; shift< 26):
         #     print("shift must be between 0 and 25")
@@ -125,13 +135,22 @@ class Message(object):
         
         i_low = 0
         for c in letters_low:
-            dic[c] = letters_low_rep[i_low + shift] 
-            i_low += 1
-            
+            if c.isalpha():
+                dic[c] = letters_low_rep[i_low + shift] 
+                i_low += 1
+            else:
+                dic[c] = c
+                i_low += 1
+                
+         
         i_up = 0
         for c in letters_up:
-            dic[c] = letters_up_rep[i_up + shift] 
-            i_up += 1
+            if c.isalpha():
+                dic[c] = letters_up_rep[i_up + shift] 
+                i_up += 1
+            else:
+                dic[c] = c
+                i_up += 1
 
         return dic
     
@@ -149,15 +168,26 @@ class Message(object):
         '''
         # pass #delete this line and replace with your code here
     
+                
         dict = self.build_shift_dict(shift)
         text_shifted_lst = []
+        text_original_lst = self.get_word_lst()
         
-        for c in self.message_text:
-            text_shifted_lst.append(dict[c])
-        
-        text_shifted = ''.join(text_shifted_lst)
+        def shift_word(word):
             
-        return text_shifted
+            word_shifted_lst = []
+            
+            for c in word:
+                word_shifted_lst.append(dict[c])
+            
+            return ''.join(word_shifted_lst)
+            
+        
+        for word in text_original_lst:
+            text_shifted_lst.append(shift_word(word))
+        
+          
+        return ' '.join(text_shifted_lst)
             
         
 
@@ -177,7 +207,15 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+        
+        
+        self.message_text = text
+        self.valid_words = load_words(file_name=WORDLIST_FILENAME)
+        self.word_lst = text.split()
+        self.shift = shift
+        self.encryption_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
     def get_shift(self):
         '''
@@ -185,7 +223,8 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -193,7 +232,8 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+        return self.encryption_dict.copy()
 
     def get_message_text_encrypted(self):
         '''
@@ -201,7 +241,8 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -213,7 +254,11 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+        self.shift = shift
+        self.encryption_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
+        
 
 
 class CiphertextMessage(Message):
@@ -227,8 +272,12 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
-
+        # pass #delete this line and replace with your code here
+    
+        self.message_text = text
+        self.valid_words = load_words(file_name=WORDLIST_FILENAME)
+        self.word_lst = text.split()
+        
     def decrypt_message(self):
         '''
         Decrypt self.message_text by trying every possible shift value
@@ -245,22 +294,58 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+        # pass #delete this line and replace with your code here
+    
+        lst = []
+        
+        for shift in range(0,26):
+            x = Message(self.apply_shift(shift))
+            n = 0
+            for word in x.word_lst:
+                if is_word(self.get_valid_words(),word):
+                    n += 1
+            lst.append(n)
+        
+        shift = lst.index(max(lst))
+        t = (shift,self.apply_shift(shift))
+            
+        return t  
+        
 
 if __name__ == '__main__':
 
 #    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
+   plaintext = PlaintextMessage('hello', 2)
+   print('Expected Output: jgnnq')
+   print('Actual Output:', plaintext.get_message_text_encrypted())
+   
+   plaintext1 = PlaintextMessage('ball, car', 2)
+   print('Expected Output: dcnn, ect')
+   print('Actual Output:', plaintext1.get_message_text_encrypted())
+   
+   plaintext2 = PlaintextMessage('ball, car', 4)
+   print('Expected Output: fepp, gev')
+   print('Actual Output:', plaintext2.get_message_text_encrypted())
+
+   #Example test case (CiphertextMessage)
+   ciphertext = CiphertextMessage('jgnnq')
+   print('Expected Output:', (24, 'hello'))
+   print('Actual Output:', ciphertext.decrypt_message())
+
+   ciphertext1 = CiphertextMessage('dcnn, ect')
+   print('Expected Output:', (24, 'ball, car'))
+   print('Actual Output:', ciphertext1.decrypt_message())
+
+   ciphertext2 = CiphertextMessage('fepp, gev')
+   print('Expected Output:', (22, 'ball, car'))
+   print('Actual Output:', ciphertext2.decrypt_message())
+   
+   ciphertext3 = CiphertextMessage(get_story_string())
+   print('Decrypted Story:')
+   print(ciphertext3.decrypt_message())
 
     #TODO: WRITE YOUR TEST CASES HERE
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+    # pass #delete this line and replace with your code here
