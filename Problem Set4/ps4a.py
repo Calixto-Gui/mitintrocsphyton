@@ -41,29 +41,29 @@ def get_permutations(sequence, step = 0,lst=[]):
     
 
 if __name__ == '__main__':
-#    #EXAMPLE
-#    example_input = 'abc'
-#    print('Input:', example_input)
-#    print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
-#    print('Actual Output:', get_permutations(example_input))
+   #EXAMPLE
+   example_input = 'aeiou'
+   print('Input:', example_input)
+   print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
+   print('Actual Output:', get_permutations(example_input))
     
-#    # Put three example test cases here (for your sanity, limit your inputs
+   # Put three example test cases here (for your sanity, limit your inputs
 #    to be three characters or fewer as you will have n! permutations for a 
 #    sequence of length n)
 
-    pass #delete this line and replace with your code here
-    # print('Input:', "abc")
-    # print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
-    # print('Actual Output:', get_permutations("abc"))
+    # pass #delete this line and replace with your code here
+   print('Input:', "abc")
+   print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
+   print('Actual Output:', get_permutations("abc"))
     
-    # print("====================================================================")
+   print("====================================================================")
     
-    # print('Input:', "nop")
-    # print('Expected Output:', ['nop', 'npo', 'onp', 'opn', 'pon', 'pno'])
-    # print('Actual Output:', get_permutations("nop"))
+   print('Input:', "nop")
+   print('Expected Output:', ['nop', 'npo', 'onp', 'opn', 'pon', 'pno'])
+   print('Actual Output:', get_permutations("nop"))
     
-    print("====================================================================")
+   print("====================================================================")
     
-    print('Input:', "jac")
-    print('Expected Output:', ['jac', 'jca', 'ajc', 'acj', 'cja', 'caj'])
-    print('Actual Output:', get_permutations("jac"))
+   print('Input:', "jac")
+   print('Expected Output:', ['jac', 'jca', 'ajc', 'acj', 'cja', 'caj'])
+   print('Actual Output:', get_permutations("jac"))
