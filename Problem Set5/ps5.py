@@ -56,6 +56,54 @@ def process(url):
 
 # TODO: NewsStory
 
+class NewsStory(object):
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title = title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+        
+    def get_guid(self):
+        '''
+        Used to safely access self.guid outside of the class
+        
+        Returns: self.guid
+        '''
+        return self.guid
+    
+    def get_title(self):
+        '''
+        Used to safely access self.title outside of the class
+        
+        Returns: self.title
+        '''
+        return self.title
+    
+    def get_description(self):
+        '''
+        Used to safely access self.description outside of the class
+        
+        Returns: self.description
+        '''
+        return self.description
+    
+    def get_link(self):
+        '''
+        Used to safely access self.link outside of the class
+        
+        Returns: self.link
+        '''
+        return self.link
+    
+    def get_pubdate(self):
+        '''
+        Used to safely access self.pubdate outside of the class
+        
+        Returns: self.pubdate
+        '''
+        return self.pubdate
+    
 
 #======================
 # Triggers
