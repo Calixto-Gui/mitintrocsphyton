@@ -110,6 +110,9 @@ class NewsStory(object):
 #======================
 
 class Trigger(object):
+    # def __init__(self, story):
+    #     self.story = story
+    
     def evaluate(self, story):
         """
         Returns True if an alert should be generated
@@ -118,13 +121,64 @@ class Trigger(object):
         # DO NOT CHANGE THIS!
         raise NotImplementedError
 
+    
+        
 # PHRASE TRIGGERS
 
 # Problem 2
 # TODO: PhraseTrigger
 
+class PhraseTrigger(Trigger):
+    def __init__(self, phrase):
+        self.phrase = phrase
+        self.text = ''
+        
+        
+    def get_phrase(self):
+        return self.phrase
+    
+    def get_text(self):
+        return self.text
+    
+    def set_phrase(self, newphrase):
+        self.phrase = newphrase
+        
+    def set_text(self, newtext):
+        self.text = newtext
+    
+    
+    def is_phrase_in(self):
+        
+        text = self.get_text()
+        text = text.lower()
+        phrase = self.get_phrase()
+        phrase = phrase.lower()
+        punctuation = string.punctuation
+        
+        for c in punctuation:
+            text = text.replace(c," ")
+            
+        text_lst = text.split()
+        phrase_lst = phrase.split()
+            
+        return any(phrase_lst == text_lst[i:i+len(phrase_lst)] for i in range(len(text_lst) -1))
+        
+        
+        
+
 # Problem 3
 # TODO: TitleTrigger
+
+class TitleTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+       PhraseTrigger.__init__(self, phrase)
+       
+    def evaluate(self, story):
+        self.story = story
+        self.set_text(story.get_title())
+        return self.is_phrase_in()
+        
+    
 
 # Problem 4
 # TODO: DescriptionTrigger
